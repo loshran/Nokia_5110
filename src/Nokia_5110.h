@@ -1,6 +1,11 @@
 #ifndef NOKIA_5110_H
 #define NOKIA_5110_H
 
+#define LCDWIDTH 84
+#define LCDHEIGHT 48
+#define BLACK 1
+#define WHITE 0
+
 #include "Arduino.h"
 #include "Display_Mode.h"
 #include "Mux_Rate.h"
@@ -19,6 +24,9 @@ class Nokia_5110 : public Print {
         void setDisplayMode(display_mode mode);
         void setBiasSystem(mux_rate rate);
         virtual size_t write(uint8_t);
+		
+		void Pixel(uint8_t x, uint8_t y);
+		void X_line(uint8_t pos_X, uint8_t pos_Y, uint8_t _length);
         
     private:
         void _print(uint8_t charAsciiCode);
@@ -32,12 +40,15 @@ class Nokia_5110 : public Print {
         void initializeForSendingCommand();
         void initializeForSendingData();
         void makeEnoughSpaceForPrinting(unsigned short int newCharacterLength);
+		
+		void PixelBorder(uint8_t x, uint8_t y);
 
         unsigned short _RST;
         unsigned short _CE;
         unsigned short _DC;
         unsigned short _DIN;
         unsigned short _CLK;
+		
 
         Cursor _cursor;
 };

@@ -189,3 +189,47 @@ size_t Nokia_5110::write(uint8_t character) {
     return 1;
 }
 
+void Nokia_5110::PixelBorder(uint8_t x, uint8_t y) {
+	if (y>47)
+  {
+    //y=y-48;
+    y=47;
+  }
+  if (x>83)
+  {
+    //x=x-84;
+    x=83;
+  }
+}
+
+void Nokia_5110::Pixel(uint8_t x, uint8_t y) {
+	PixelBorder(x,y);
+	uint8_t y_count = 0;
+	while(y>7)
+	{
+		y_count++;
+		y -= 8;
+	}
+	setCursor(x, y_count);
+	uint8_t valp;
+	switch(y)
+	{
+	case 0: valp = 0x01;break;
+	case 1: valp = 0x02;break;
+	case 2: valp = 0x04;break;
+	case 3: valp = 0x08;break;
+	case 4: valp = 0x10;break;
+	case 5: valp = 0x20;break;
+	case 6: valp = 0x40;break;
+	case 7: valp = 0x80;break;
+	default: setCursor(83,5);valp = 0xff;
+	}
+	transmitInformation(valp);
+}
+
+void Nokia_5110::X_line(uint8_t pos_X, uint8_t pos_Y, uint8_t _length) {
+	for (uint8_t n=0; n<=_length; n++)
+	{
+	Pixel(pos_X+n,pos_Y);
+	}
+}
