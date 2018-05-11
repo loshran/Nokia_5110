@@ -224,6 +224,7 @@ void Nokia_5110::Pixel(uint8_t x, uint8_t y) {
 	case 7: valp = 0x80;break;
 	default: setCursor(83,5);valp = 0xff;
 	}
+	initializeForSendingData();
 	transmitInformation(valp);
 }
 
@@ -231,5 +232,32 @@ void Nokia_5110::X_line(uint8_t pos_X, uint8_t pos_Y, uint8_t _length) {
 	for (uint8_t n=0; n<=_length; n++)
 	{
 	Pixel(pos_X+n,pos_Y);
+	}
+}
+
+void Nokia_5110::OscilloScope(uint8_t dataport,uint8_t size_X,uint8_t size_Y,uint8_t pos_X, uint8_t pos_Y, uint16_t metric_time, uint8_t MAX_size_bit_signal)
+{
+  int val = 0;
+  uint8_t start_X = pos_X;
+  uint8_t start_Y = pos_Y;
+  int8_t ADCbit;
+  for(uint16_t n=0; n<metric_time; n++)
+  {
+    if (start_X > 83) start_X=83;
+    else if (start_X > (size_X+pos_X)) start_X=pos_X;
+    clearColumn(start_X,start_X+5,1,5);
+    ADCbit=analogRead(dataport);
+    val=(ADCbit-MAX_size_bit_signal)*(size_Y/1024.0); // MAX_size_bit_signal is coefficient for my signal. It is max size of ADCbit for my signal.
+    val=round(val+start_Y); 
+    Pixel(start_X,val);
+    start_X++;
+    }
+  start_X=0;
+  }
+  
+void Nokia_5110::clearColumn(uint8_t start_x,uint8_t end_x, uint8_t start_y,uint8_t end_y) {
+	for (uint8_t n=start_y; n<=end_y; n++)
+	{
+		clear(n,start_x,end_x);
 	}
 }

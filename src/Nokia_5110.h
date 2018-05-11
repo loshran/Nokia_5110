@@ -27,7 +27,9 @@ class Nokia_5110 : public Print {
 		
 		void Pixel(uint8_t x, uint8_t y);
 		void X_line(uint8_t pos_X, uint8_t pos_Y, uint8_t _length);
-        
+		void OscilloScope(uint8_t dataport,uint8_t size_X,uint8_t size_Y,uint8_t pos_X, uint8_t pos_Y, uint16_t metric_time, uint8_t MAX_size_bit_signal);
+        void clearColumn(uint8_t start_x,uint8_t end_x, uint8_t start_y,uint8_t end_y);
+		
     private:
         void _print(uint8_t charAsciiCode);
         void startTransmission();
@@ -48,7 +50,7 @@ class Nokia_5110 : public Print {
         unsigned short _DC;
         unsigned short _DIN;
         unsigned short _CLK;
-		
+		uint8_t x_start = 0;
 
         Cursor _cursor;
 };
