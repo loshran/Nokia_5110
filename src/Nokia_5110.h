@@ -29,6 +29,8 @@ class Nokia_5110 : public Print {
 		void X_line(uint8_t pos_X, uint8_t pos_Y, uint8_t _length);
 		void OscilloScope(uint8_t dataport,uint8_t size_X,uint8_t size_Y,uint8_t pos_X, uint8_t pos_Y, uint16_t metric_time, uint8_t MAX_size_bit_signal);
         void clearColumn(uint8_t start_x,uint8_t end_x, uint8_t start_y,uint8_t end_y);
+		void print_simpol(uint8_t simbol_cod_number);
+		
 		
     private:
         void _print(uint8_t charAsciiCode);
