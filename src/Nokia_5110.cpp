@@ -1,7 +1,7 @@
 #include "Arduino.h"
 #include "Nokia_5110.h"
 #include "Font.h"
-#include "Simbol.h"
+#include "Symbols.h"
 
 
 Nokia_5110::Nokia_5110(){}
@@ -263,14 +263,14 @@ void Nokia_5110::clearColumn(uint8_t start_x,uint8_t end_x, uint8_t start_y,uint
 		clear(n,start_x,end_x);
 	}
 }
-void Nokia_5110::print_simpol(uint8_t simbol_cod_number) {
+void Nokia_5110::print_symbol(uint8_t symbol_cod_number) {
 	
 	setCursor(_cursor.getPosition().x, _cursor.getPosition().y);
 
     initializeForSendingData();
    
 	for(int i=0; i<10; i++) {
-		transmitInformation(simbols[simbol_cod_number][i]);
+		transmitInformation(symbols[symbols_cod_number][i]);
 	}
 	transmitInformation(0x0); // add an empty line after each chars
 }

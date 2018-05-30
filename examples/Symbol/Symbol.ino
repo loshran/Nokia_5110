@@ -28,6 +28,6 @@ void setup() {
 
 void loop() {
   lcd.setCursor(50, 0);
-  lcd.print_simpol(0x03); //Flash card simbol
+  lcd.print_symbol(0x03); //Flash card simbol
   delay(1000);
   }
