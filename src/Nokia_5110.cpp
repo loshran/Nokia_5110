@@ -270,7 +270,7 @@ void Nokia_5110::print_symbol(uint8_t symbol_cod_number) {
     initializeForSendingData();
    
 	for(int i=0; i<10; i++) {
-		transmitInformation(symbols[symbols_cod_number][i]);
+		transmitInformation(symbols[symbol_cod_number][i]);
 	}
 	transmitInformation(0x0); // add an empty line after each chars
 }
