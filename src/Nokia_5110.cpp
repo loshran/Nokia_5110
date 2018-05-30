@@ -273,4 +273,5 @@ void Nokia_5110::print_symbol(uint8_t symbol_cod_number) {
 		transmitInformation(symbols[symbol_cod_number][i]);
 	}
 	transmitInformation(0x0); // add an empty line after each chars
+	_cursor.moveXAxis(10 + 1); // move cursor to 10+1 pixel forward
 }
