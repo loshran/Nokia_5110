@@ -2,31 +2,55 @@
 #include "Nokia_5110.h"
 #include "Font.h"
 #include "Symbols.h"
+#include "SPI.h"
 
+Nokia_5110::Nokia_5110(int8_t RST, int8_t CE, int8_t DC){
+	
+  _DIN = -1;
+  _CLK = -1;
+  _DC = DC;
+  _RST = RST;
+  _CE = CE;
+}
 
-Nokia_5110::Nokia_5110(){}
-
-Nokia_5110::Nokia_5110(unsigned short RST, unsigned short CE, unsigned short DC, unsigned short DIN, unsigned short CLK){
+Nokia_5110::Nokia_5110(int8_t RST, int8_t CE, int8_t DC, int8_t DIN, int8_t CLK){
+	
     _RST = RST;
     _CE = CE;
     _DC = DC;
     _DIN = DIN;
     _CLK = CLK;
+}
 
-    pinMode(RST, OUTPUT);
-    pinMode(CE, OUTPUT);
-    pinMode(DC, OUTPUT);
-    pinMode(DIN, OUTPUT);
-    pinMode(CLK, OUTPUT);
+void Nokia_5110::begin() {
+  if (ifHardwareSPI()) {
+    // Setup hardware SPI
+    SPI.begin();
+    SPI.setClockDivider(SPI_CLOCK_DIV4);
+    SPI.setDataMode(SPI_MODE0);
+    SPI.setBitOrder(MSBFIRST);
+  }
+  else {
+    // Setup software SPI
+    pinMode(_DIN, OUTPUT);
+    pinMode(_CLK, OUTPUT);
+  }
 
-    _cursor = Cursor();
+  pinMode(_DC, OUTPUT);
+  if (_RST > 0)
+      pinMode(_RST, OUTPUT);
+  if (_CE > 0)
+      pinMode(_CE, OUTPUT);
+  _cursor = Cursor();
+  reset();
+  clear();
+  setDisplayMode(Display_Mode::NORMAL);
+  setBiasSystem(Mux_Rate::FORTY);
+  setContrast(60);
+}
 
-    reset();
-
-    clear();
-    setDisplayMode(Display_Mode::NORMAL);
-    setBiasSystem(Mux_Rate::FORTY);
-    setContrast(60);
+bool Nokia_5110::ifHardwareSPI() {
+  return (_DIN == -1 && _CLK == -1);
 }
 
 void Nokia_5110::startTransmission(){
@@ -38,9 +62,18 @@ void Nokia_5110::endTransmission(){
 }
 
 void Nokia_5110::transmitInformation(byte information){
+	
+	if (ifHardwareSPI()) {
+    // Hardware SPI
+	startTransmission();
+    SPI.transfer(information);
+	endTransmission();
+	}
+	else {
     startTransmission();
-    shiftOut(_DIN, _CLK, MSBFIRST, information);
+	shiftOut(_DIN, _CLK, MSBFIRST, information);
     endTransmission();
+	}
 }
 
 void Nokia_5110::execute(byte command){
@@ -89,6 +122,7 @@ void Nokia_5110::setTemperatureCoefficient(unsigned short value){
 
 void Nokia_5110::reset(){
     digitalWrite(_RST, LOW);
+	delay(500);
     digitalWrite(_RST, HIGH);
 }
 
@@ -174,12 +208,10 @@ void Nokia_5110::clear(position inRow, position fromColumn, position toColumn){
     setCursor(fromColumn, inRow);
 }
 
-
 void Nokia_5110::setDisplayMode(display_mode value){
     basicInstruction();
     execute(value);
 }
-
 
 void Nokia_5110::setBiasSystem(mux_rate rate){
     extendedInstruction();
@@ -263,6 +295,7 @@ void Nokia_5110::clearColumn(uint8_t start_x,uint8_t end_x, uint8_t start_y,uint
 		clear(n,start_x,end_x);
 	}
 }
+
 void Nokia_5110::print_symbol(uint8_t symbol_cod_number) {
 	
 	setCursor(_cursor.getPosition().x, _cursor.getPosition().y);

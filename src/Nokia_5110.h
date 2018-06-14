@@ -1,11 +1,6 @@
 #ifndef NOKIA_5110_H
 #define NOKIA_5110_H
 
-#define LCDWIDTH 84
-#define LCDHEIGHT 48
-#define BLACK 1
-#define WHITE 0
-
 #include "Arduino.h"
 #include "Display_Mode.h"
 #include "Mux_Rate.h"
@@ -15,7 +10,9 @@ class Nokia_5110 : public Print {
 
     public:
         Nokia_5110();
-        Nokia_5110(unsigned short RST, unsigned short CE, unsigned short DC, unsigned short DIN, unsigned short CLK);
+        Nokia_5110(int8_t RST, int8_t CE, int8_t DC, int8_t DIN, int8_t CLK);
+		Nokia_5110(int8_t DC, int8_t CS, int8_t RST);
+		
         void setContrast(unsigned short value);
         void setTemperatureCoefficient(unsigned short value);
         void clear();
@@ -30,6 +27,8 @@ class Nokia_5110 : public Print {
 		void OscilloScope(uint8_t dataport,uint8_t size_X,uint8_t size_Y,uint8_t pos_X, uint8_t pos_Y, uint16_t metric_time, uint8_t MAX_size_bit_signal);
         void clearColumn(uint8_t start_x,uint8_t end_x, uint8_t start_y,uint8_t end_y);
 		void print_symbol(uint8_t symbol_cod_number);
+		
+		void begin();
 		
 		
     private:
@@ -46,12 +45,10 @@ class Nokia_5110 : public Print {
         void makeEnoughSpaceForPrinting(unsigned short int newCharacterLength);
 		
 		void PixelBorder(uint8_t x, uint8_t y);
+		
+		bool ifHardwareSPI();
 
-        unsigned short _RST;
-        unsigned short _CE;
-        unsigned short _DC;
-        unsigned short _DIN;
-        unsigned short _CLK;
+        int8_t _RST, _CE, _DC, _DIN, _CLK;
 		uint8_t x_start = 0;
 
         Cursor _cursor;
