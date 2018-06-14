@@ -1,3 +1,33 @@
+###It is best of the best library for LCD Nokia 5110, because used very small size of memory
+### Added new contribution:
+- added opportunity work with hardware SPI of Arduino or software SPI with new function void begin()
+
+- added opportunity draw pixel with function void Pixel(uint8_t x, uint8_t y)
+x and y are coordinates in axesin. Size x = 0...83 and y = 0...47
+
+- added opportunity draw horithontal line with function void X_line (uint8_t pos_X, uint8_t pos_Y, uint8_t _length)
+x and y are coordinates in axesin and _length is length of line. Size x = 0...83 and y = 0...47
+
+- added opportunity draw graph on input signal with function void OscilloScope(uint8_t dataport,uint8_t size_X,uint8_t size_Y,uint8_t pos_X, uint8_t pos_Y, uint16_t metric_time, uint8_t MAX_size_bit_signal)
+This function can draw graphics on LCD from ADC of Arduino's bord
+dataport is port of ADC
+size_X and size_Y are size oscilloscope monitor on LCD display
+pos_X and pos_Y are coordinates in axesin. Size x = 0...83 and y = 0...47
+metric_time is counts of measurements circle 
+MAX_size_bit_signal is max size your signal in ADC bits (signal sweep)
+
+- added opportunity clear column with function void clearColumn(uint8_t start_x,uint8_t end_x, uint8_t start_y,uint8_t end_y)
+This function can clear column on 1 pixel size of X axesin and 8 pixels size of Y axesin.
+start_x and start_y are coordinates for start's position.
+end_x  and end_y are coordinates  for end's position.
+Size start_x = 0...83 and start_y = 0...47
+
+- added opportunity print special symbol with function void print_symbol(uint8_t symbol_cod_number)
+This function printing symbols from Symbols.h.
+For printing this symbols you need set symbol_cod_number in HEX like it written in Symbols.h
+You could add new symbols to Symbols.h if you need.
+
+
 ### A little bit of a history:
 Nokia 5110 LCD was meant to be used in one of my projects yet to fail. Not having thoroughly read its datasheet, started looking for drivers and libraries to get it up and running as quickly as I could, but failed dramatically.
 
@@ -21,15 +51,18 @@ Now, its time to instantiate Nokia_5110 class to have access to its APIs. Which 
 
 In `setup` function of your program, or outside of it, create a variable to hold Nokia_5110 class' object:
 
-`Nokia_5110 lcd = Nokia_5110(RST, CE, DC, DIN, CLK);`
+`Nokia_5110 lcd = Nokia_5110(RST, CE, DC, DIN, CLK);`// for Software SPI on anyone pins
+or
+`Nokia_5110 lcd = Nokia_5110(RST, CE, DC);`// for Hardware SPI
+
 
 in this case variable is called `lcd`. And as you can see, Nokia_5110's constructor needs 5 parameters.
 
 - RST is for lcd's reset pin.
 - CE is  for lcd's chip enable pin.
 - DC is for lcd's Command/Data pin.
-- DIN is for lcd's data in pin.
-- CLK is for lcd's clock pin.
+- DIN is for lcd's data in pin. (for Hardware SPI must be conecting to 11)
+- CLK is for lcd's clock pin. (for Hardware SPI must be connecting to 13)
 
 You need to pass the constructor, digital pin numbers of arduino to which LCD pins are connected.
 

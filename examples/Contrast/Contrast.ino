@@ -1,15 +1,16 @@
 #include "Nokia_5110.h"
 
-#define RST 2
-#define CE 3
-#define DC 4
-#define DIN 5
-#define CLK 6
+#define RST 7
+#define CE 6
+#define DC 8
+//#define DIN 11
+//#define CLK 13
 
-Nokia_5110 lcd = Nokia_5110(RST, CE, DC, DIN, CLK);
-
+//Nokia_5110 lcd = Nokia_5110(RST, CE, DC, DIN, CLK); // software SPI
+Nokia_5110 lcd = Nokia_5110(RST, CE, DC); // hardware SPI
 
 void setup() {
+	lcd.begin();
     lcd.setContrast(60); // 60 is the default value set by the driver
 }
 
